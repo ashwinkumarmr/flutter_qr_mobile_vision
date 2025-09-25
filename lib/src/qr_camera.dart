@@ -98,10 +98,15 @@ class QrCameraState extends State<QrCamera> with WidgetsBindingObserver {
   Future<PreviewDetails>? _asyncInitOnce;
 
   Future<PreviewDetails> _asyncInit(num width, num height) async {
+    final size = MediaQuery.of(context).size;
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+    final isPortrait = size.height > size.width;
+ 
     return await QrMobileVision.start(
-      width: (devicePixelRatio * width.toInt()).ceil(),
-      height: (devicePixelRatio * height.toInt()).ceil(),
+      width:
+          (devicePixelRatio * (isPortrait ? size.height : size.width)).ceil(),
+      height:
+          (devicePixelRatio * (isPortrait ? size.width : size.height)).ceil(),
       qrCodeHandler: widget.qrCodeCallback,
       formats: widget.formats,
       cameraDirection: widget.cameraDirection,
